@@ -59,7 +59,7 @@ if prompt := st.chat_input("Dis-moi tout… ou pourquoi tu hésites ? 😊"):
         placeholder = st.empty()
         full = ""
         for chunk in client.chat.completions.create(
-            model="gpt-5",      # ← MÊME QUE CHATGPT
+            model="gpt-5-turbo",      # ← FIX : Nom exact pour GPT-5 dans l'API
             messages=st.session_state.messages,
             temperature=0.7,
             max_tokens=400,
@@ -69,7 +69,7 @@ if prompt := st.chat_input("Dis-moi tout… ou pourquoi tu hésites ? 😊"):
                 full += chunk.choices[0].delta.content
                 placeholder.markdown(full + "▌")
         
-        # FORCE LA STRUCTURE
+        # FORCE LA STRUCTURE (comme avant)
         if "Votez OUI" not in full:
             full += "\n\n**Votez OUI aux Bilat III – pour une Suisse forte, libre et gagnante !** 🇨🇭"
         words = full.split()
