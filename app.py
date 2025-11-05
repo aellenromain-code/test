@@ -59,7 +59,7 @@ if prompt := st.chat_input("Dis-moi tout… ou pourquoi tu hésites ? 😊"):
         placeholder = st.empty()
         full = ""
         for chunk in client.chat.completions.create(
-            model="gpt-4o-mini",      # ← MÊME QUE CHATGPT
+            model="gpt-5",      # ← MÊME QUE CHATGPT
             messages=st.session_state.messages,
             temperature=0.7,
             max_tokens=400,
