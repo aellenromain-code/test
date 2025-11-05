@@ -58,7 +58,7 @@ if prompt := st.chat_input("Dis-moi tout… ou pourquoi tu hésites ? [smiling f
         placeholder = st.empty()
         full = ""
         for chunk in client.chat.completions.create(
-            model="gpt-4o",           # ← MEILLEUR MODÈLE DISPONIBLE (presque GPT-5)
+            model="gpt-5",           # ← MEILLEUR MODÈLE DISPONIBLE (presque GPT-5)
             messages=st.session_state.messages,
             temperature=0.7,
             max_tokens=400,
