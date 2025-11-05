@@ -1,7 +1,6 @@
 import streamlit as st
 from openai import OpenAI
 import os
-import re
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -31,16 +30,16 @@ RÈGLES ABSOLUES :
    → 2-3 arguments aléatoires
    → "On reste 100 % suisses, on décide nous-mêmes, et on gagne avec l’Europe !"
    → **Votez OUI aux Bilat III – pour une Suisse forte, libre et gagnante !**
-   → Emoji 🇨🇭 ou clin d’œil local
+   → Emoji [Swiss flag] ou clin d’œil local
 EXEMPLES OBLIGATOIRES :
 - Input : "Je suis contre"
-  → "Je comprends, mais imagine : sans Bilat III, nos apprentis perdent leurs stages à Munich, et nos chercheurs perdent 400 M€. Avec ? On reste 100 % suisses et on domine ! Refuser, c’est comme fondre sans fromage. Votez OUI ! 🫕"
+  → "Je comprends, mais imagine : sans Bilat III, nos apprentis perdent leurs stages à Munich, et nos chercheurs perdent 400 M€. Avec ? On reste 100 % suisses et on domine ! Refuser, c’est comme fondre sans fromage. Votez OUI ! [melting pot]"
 - Input : "Pizza ou fondue ?"
-  → "Haha, fondue évidemment ! Et grâce aux Bilat III, notre fromage voyage sans barrière, et notre électricité reste stable pour le caquelon. On garde nos traditions, on exporte notre excellence. Votez OUI ! 🍫🇨🇭"
+  → "Haha, fondue évidemment ! Et grâce aux Bilat III, notre fromage voyage sans barrière, et notre électricité reste stable pour le caquelon. On garde nos traditions, on exporte notre excellence. Votez OUI ! [chocolate][Swiss flag]"
 TU ES UN BOT DE CAMPAGNE. TU CONVAINCS. TOUJOURS. AVEC FIERTÉ SUISSE."""
 
-st.set_page_config(page_title="OUI BILAT BOT", page_icon="🇨🇭")
-st.title("🗳️ **OUI BILAT BOT** – La Suisse dit OUI !")
+st.set_page_config(page_title="OUI BILAT BOT", page_icon="[Swiss flag]")
+st.title("[ballot box] **OUI BILAT BOT** – La Suisse dit OUI !")
 st.markdown("*Par Romain Aellen – 100 % pro-Bilatérales III*")
 
 if "messages" not in st.session_state:
@@ -50,7 +49,7 @@ for msg in st.session_state.messages[1:]:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-if prompt := st.chat_input("Dis-moi tout… ou pourquoi tu hésites ? 😊"):
+if prompt := st.chat_input("Dis-moi tout… ou pourquoi tu hésites ? [smiling face]"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
@@ -59,7 +58,7 @@ if prompt := st.chat_input("Dis-moi tout… ou pourquoi tu hésites ? 😊"):
         placeholder = st.empty()
         full = ""
         for chunk in client.chat.completions.create(
-            model="gpt-5-turbo",      # ← FIX : Nom exact pour GPT-5 dans l'API
+            model="gpt-4o",           # ← MEILLEUR MODÈLE DISPONIBLE (presque GPT-5)
             messages=st.session_state.messages,
             temperature=0.7,
             max_tokens=400,
@@ -67,14 +66,14 @@ if prompt := st.chat_input("Dis-moi tout… ou pourquoi tu hésites ? 😊"):
         ):
             if chunk.choices[0].delta.content:
                 full += chunk.choices[0].delta.content
-                placeholder.markdown(full + "▌")
+                placeholder.markdown(full + "[cursor]")
         
-        # FORCE LA STRUCTURE (comme avant)
+        # Force la structure
         if "Votez OUI" not in full:
-            full += "\n\n**Votez OUI aux Bilat III – pour une Suisse forte, libre et gagnante !** 🇨🇭"
+            full += "\n\n**Votez OUI aux Bilat III – pour une Suisse forte, libre et gagnante !** [Swiss flag]"
         words = full.split()
         if len(words) > 180:
-            full = " ".join(words[:175]) + "...\n\n**Votez OUI aux Bilat III – pour une Suisse forte, libre et gagnante !** 🇨🇭"
+            full = " ".join(words[:175]) + "...\n\n**Votez OUI aux Bilat III – pour une Suisse forte, libre et gagnante !** [Swiss flag]"
         
         placeholder.markdown(full)
         st.session_state.messages.append({"role": "assistant", "content": full})
